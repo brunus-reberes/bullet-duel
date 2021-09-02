@@ -1,14 +1,14 @@
+import utils
+from sprites.logos import logo1
+
 class MainMenu:
 
     def print(self, stdscr):
-        stdscr.addstr(3, 35, '┏━━┓╋╋╋┏┓┏┓╋╋╋┏┓┏━━━┓╋╋╋╋╋┏┓')
-        stdscr.addstr(4, 35, '┃┏┓┃╋╋╋┃┃┃┃╋╋┏┛┗╋┓┏┓┃╋╋╋╋╋┃┃')
-        stdscr.addstr(5, 35, '┃┗┛┗┳┓┏┫┃┃┃┏━┻┓┏┛┃┃┃┣┓┏┳━━┫┃')
-        stdscr.addstr(6, 35, '┃┏━┓┃┃┃┃┃┃┃┃┃━┫┃╋┃┃┃┃┃┃┃┃━┫┃')
-        stdscr.addstr(7, 35, '┃┗━┛┃┗┛┃┗┫┗┫┃━┫┗┳┛┗┛┃┗┛┃┃━┫┗┓')
-        stdscr.addstr(8, 35, '┗━━━┻━━┻━┻━┻━━┻━┻━━━┻━━┻━━┻━┛ ')
+        utils.draw(stdscr, logo1, 3, 20)
 
-        stdscr.refresh()
+        menu = utils.compensate(['I Player', 'II Players', 'Options', 'Exit'])
+
+        utils.drawr(stdscr, menu, 15, 10)
 
 
 
