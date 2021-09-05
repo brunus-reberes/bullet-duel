@@ -1,9 +1,14 @@
-swords1 = '''
+
+class Swords:
+
+   def left(self):
+      return'''
    .
 ;-{<>===>
-   `'''
-
-swords1r = '''
+   `'''.splitlines()[1:]
+   
+   def right(self):
+      return'''
      .
 <===<>}-;
-     ´'''
+     ´'''.splitlines()[1:]
