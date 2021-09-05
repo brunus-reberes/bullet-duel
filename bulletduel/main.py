@@ -6,17 +6,15 @@ import config
 
 def main(stdscr):
 
-    Window(config.window_width, config.window_heigth).print(stdscr)
+    Window(stdscr, config.window_width, config.window_heigth)
 
-    MainMenu().print(stdscr)
-
+    MainMenu(stdscr)
     
+    stdscr.move(config.window_heigth + 1, config.window_width)
     stdscr.getkey()
 
-
-
 if __name__ == "__main__":
-    try:
+    #try:
         curses.wrapper(main)
-    except Exception as err:
-        print(err)
+    #except Exception as err:
+    #    print(err.with_traceback())
