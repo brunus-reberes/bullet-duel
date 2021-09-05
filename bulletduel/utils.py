@@ -1,5 +1,3 @@
-import math
-
 def draw(stdscr, sprite, y, x):
     i = y
     for line in sprite:
@@ -22,6 +20,14 @@ def _compensate(line, highest_len):
     empty = ' ' * half_spaces
     line = empty + line
     return line
+
+def height(sprite):
+    return len(sprite)
+
+def width(sprite):
+    lens = [len(line) for line in sprite]
+    return max(lens)
+
     
 
 
