@@ -1,33 +1,35 @@
 class Window:
 
 
-    def __init__(self, width, height, top_bottom = '-', left_right = '|', corners = '+') -> None:
+    def __init__(self, stdscr, width, height, top_bottom = '-', left_right = '|', corners = '+') -> None:
+        self.stdscr = stdscr
         self.width = width
         self.height = height
         self.top_bottom = top_bottom
         self.left_right = left_right
         self.corners = corners
+        self.print()
 
-    def print(self, stdscr):
+    def print(self):
         try:
-            stdscr.clear()
+            self.stdscr.clear()
 
             #TOP_BOTTOM
             for x in range(1, self.width - 1):
-                stdscr.addch(0, x, self.top_bottom) #TOP
-                stdscr.addch(self.height - 1, x, self.top_bottom)
+                self.stdscr.addch(0, x, self.top_bottom) #TOP
+                self.stdscr.addch(self.height - 1, x, self.top_bottom)
 
             #LEFT_RIGHT
             for y in range(1, self.height - 1):
-                stdscr.addch(y, 0, self.left_right)
-                stdscr.addch(y, self.width - 1, self.left_right)
+                self.stdscr.addch(y, 0, self.left_right)
+                self.stdscr.addch(y, self.width - 1, self.left_right)
 
             #CORNERS
-            stdscr.addch(0, 0, self.corners)
-            stdscr.addch(0, self.width - 1, self.corners)
-            stdscr.addch(self.height - 1, 0, self.corners)
-            stdscr.addch(self.height - 1, self.width - 1, self.corners)
+            self.stdscr.addch(0, 0, self.corners)
+            self.stdscr.addch(0, self.width - 1, self.corners)
+            self.stdscr.addch(self.height - 1, 0, self.corners)
+            self.stdscr.addch(self.height - 1, self.width - 1, self.corners)
 
-            stdscr.refresh()
+            self.stdscr.refresh()
         except Exception:
             raise Exception("Resize Window")            
