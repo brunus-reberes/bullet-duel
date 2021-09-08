@@ -32,4 +32,41 @@ class Window:
 
             self.stdscr.refresh()
         except Exception:
-            raise Exception("Resize Window")            
+            raise Exception("Resize Window")     
+
+
+class Sprite:
+
+    @staticmethod
+    def clean(image: str) -> str:
+        image_striped = image.splitlines()
+        image_cleaned = list()
+        for strip in image_striped:
+            if not (strip == '' or strip.isspace()):
+                image_cleaned.append(strip)
+        return image_cleaned
+
+
+    def __init__(self, image, y, x) -> None:
+        self.image = self.clean(image)
+        self.y = y
+        self.x = x
+
+    def print(self, stdscr):
+        pass
+
+    def erase(self, stdscr):
+        pass
+
+
+        
+
+if __name__ == '__main__':
+    s = '''
+         .
+    <===<>}-;
+         ´
+         '''
+
+    s = Sprite.clean(s)
+    print(s)
