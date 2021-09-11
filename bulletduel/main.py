@@ -1,8 +1,7 @@
 import curses
-from core import * 
-from menus import *
+from windows import * 
+from resources import *
 import config
-
 
 def main(stdscr):
 

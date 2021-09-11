@@ -3,18 +3,20 @@ import logos
 import pointers
 
 
-class MainMenu(core.Menu):
+class MainMenu:
 
-    def __init__(self, logo = logos.Big(), pointers = pointers.Swords()) -> None:
+    def __init__(self, logo : core.Sprite = logos.Big(), pointers : core.Pointer = pointers.Swords()) -> None:
         self.logo = logo
         self.pointers = pointers
         self.print()
 
 
     def print(self, stdscr):
-        self.draw(stdscr, self.logo, 3, 20)
 
-        menu = self.compensate(['I Player', 'II Players', 'Options', 'Exit'])
+        self.logo.draw(stdscr, 3, 20)
+
+        #este metodo tem de devolver uma sprite para depois poder ser desenhada
+        menu = core.Sprite.compensate(['I Player', 'II Players', 'Options', 'Exit'])
 
         self.draw(stdscr, menu, 15, 20)
 
