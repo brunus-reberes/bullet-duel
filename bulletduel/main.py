@@ -1,5 +1,5 @@
 import curses
-from domain import * 
+from core import * 
 from menus import *
 import config
 

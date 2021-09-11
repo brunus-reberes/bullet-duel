@@ -1,8 +1,19 @@
-logo1 = '''
-  ____        _ _      _   _____             _ 
- |  _ \      | | |    | | |  __ \           | |
- | |_) |_   _| | | ___| |_| |  | |_   _  ___| |
- |  _ <| | | | | |/ _ \ __| |  | | | | |/ _ \ |
- | |_) | |_| | | |  __/ |_| |__| | |_| |  __/ |
- |____/ \__,_|_|_|\___|\__|_____/ \__,_|\___|_|'''.splitlines()[1:]
+import core
+import images.logos as logos
+
+
+class Logo:
+
+  def __init__(self) -> None:
+      self.image = core.Sprite(logos.big)
+
+
+class Big():
+
+  def __init__(self) -> None:
+      self.image = core.Sprite(logos.big)
+
+  
+
+  
 

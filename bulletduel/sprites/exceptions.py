@@ -1,0 +1,2 @@
+class EreaseException(Exception):
+    pass
