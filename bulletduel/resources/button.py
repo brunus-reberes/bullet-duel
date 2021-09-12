@@ -1,0 +1,2 @@
+KEY_UP = 65
+KEY_DOWN = 66

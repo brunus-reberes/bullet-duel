@@ -1,6 +1,3 @@
-import exceptions
-
-
 class Sprite():
 
     @staticmethod
@@ -12,11 +9,14 @@ class Sprite():
                 image_cleaned.append(strip)
         return image_cleaned
     
-    @staticmethod
-    def compensate(sprite):
+    @classmethod
+    def create_menu(cls, sprite):
         lens = [len(line) for line in sprite]
         highest_len = max(lens)
-        return [Sprite._compensate(line, highest_len) for line in sprite]
+        new_sprite = ''
+        for line in sprite:
+            new_sprite += cls._compensate(line, highest_len) + '\n'
+        return cls(new_sprite)
 
     @staticmethod
     def _compensate(line, highest_len):
@@ -27,8 +27,10 @@ class Sprite():
         return line
 
 
-    def __init__(self, image) -> None:
+    def __init__(self, image, y = None, x = None) -> None:
         self.image = self.clean(image)
+        self.y = y
+        self.x = x
     
     @property
     def height(self):
@@ -45,9 +47,8 @@ class Sprite():
         self._print(stdscr, self.image, y, x)
 
     def erase(self, stdscr):
-        if not self.y or not self.x:
-            raise exceptions.EreaseException('You must draw sprite before erasing')
-        self._print(stdscr, self._blank(self.image), self.y, self.x)
+        if not self.y is None and not self.x is None:
+            self._print(stdscr, self._blank(), self.y, self.x)
 
     def _blank(self):
         blank = ' ' * self.width + '\n'
@@ -66,18 +67,36 @@ class Pointer():
        self.right = Sprite(right)
        self.left = Sprite(left)
 
-    def print_left(self, stdscr, y, x):
-       self.left.print(stdscr, y, x)
+    def draw_left(self, stdscr, y, x):
+       self.left.draw(stdscr, y, x)
 
     def erase_left(self, stdscr):
        self.left.erase(stdscr)
     
-    def print_right(self, stdscr, y, x):
-       self.right.print(stdscr, y, x)
+    def draw_right(self, stdscr, y, x):
+       self.right.draw(stdscr, y, x)
 
     def erase_right(self, stdscr):
        self.right.erase(stdscr)
 
 
 if __name__ == '__main__':
-    pass
+    import curses
+    def main(stdscr):
+
+        sword_left='''
+   .
+;-{<>===>
+   `'''
+        s = Sprite(sword_left)
+        s.draw(stdscr, 0, 0)
+
+        stdscr.refresh()
+        stdscr.getkey()
+
+        s.erase(stdscr)
+
+        stdscr.refresh()
+        stdscr.getkey()
+
+    curses.wrapper(main)

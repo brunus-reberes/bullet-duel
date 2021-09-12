@@ -1,5 +1,5 @@
-import core
-import images.pointers as pointer
+import resources.core as core
+import resources.images.pointers as pointer
 
 
 class Swords(core.Pointer):

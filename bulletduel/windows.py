@@ -1,3 +1,5 @@
+import curses
+
 class Window:
 
     def __init__(self, stdscr, width, height, top_bottom = '-', left_right = '|', corners = '+') -> None:
@@ -31,7 +33,10 @@ class Window:
 
             self.stdscr.refresh()
         except Exception:
-            raise Exception("Resize Window")     
+            raise Exception("Resize Window")   
+
+    def inside_window(self):
+        return curses.newwin(self.height-2, self.width-2, 1, 1) 
 
 
 class WindowBorderless:

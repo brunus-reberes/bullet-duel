@@ -1,5 +1,5 @@
-import core
-import images.logos as logos
+import resources.core as core
+import resources.images.logos as logos
 
 
 class Big(core.Sprite):

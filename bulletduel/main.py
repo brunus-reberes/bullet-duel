@@ -5,12 +5,13 @@ import config
 
 def main(stdscr):
 
-    Window(stdscr, config.window_width, config.window_heigth)
+    curses.curs_set(0)
 
-    MainMenu(stdscr)
+    scene = Window(stdscr, config.window_width, config.window_heigth).inside_window()
+
+    MainMenu(scene)
     
     stdscr.move(config.window_heigth + 1, config.window_width)
-    stdscr.getkey()
 
 if __name__ == "__main__":
     #try:
