@@ -1,0 +1,1 @@
+from bulletduel.resources.scenes.main_menu import MainMenu

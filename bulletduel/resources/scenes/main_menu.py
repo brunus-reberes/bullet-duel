@@ -1,20 +1,18 @@
-import config
-
-import resources.button as button
-import resources.core as resources
-import resources.logos as logos
-import resources.pointers as pointers
+import bulletduel.config as config
+import bulletduel.resources.utilities.button as button
+import bulletduel.resources.blueprint as blueprint
+import bulletduel.resources.logos as logos
+import bulletduel.resources.pointers as pointers
 
 
 class MainMenu:
 
-    def __init__(self, stdscr, logo : resources.Sprite = logos.Big(), pointers : resources.Pointer = pointers.Swords()) -> None:
+    def __init__(self, stdscr, logo : blueprint.Sprite = logos.Big(), pointers : blueprint.Pointer = pointers.Swords()) -> None:
         self.logo = logo
-        self.logo_x = 34 - int(self.logo.width / 2)
+        self.logo_x = config.window_width_half - int(self.logo.width / 2)
         self.pointers = pointers
-        self.mid_width = config.window_width_half
-        self.menu = resources.Sprite.create_menu(['Duel', 'Campaign', 'Settings', 'Exit'])
-        self.menu_x = 34 - int(self.menu.width / 2)
+        self.menu = blueprint.Sprite.create_menu(['Duel', 'Campaign', 'Settings', 'Exit'])
+        self.menu_x = config.window_width_half - int(self.menu.width / 2)
 
         self.start(stdscr)
 
@@ -31,7 +29,8 @@ class MainMenu:
                 pointer_y -= 1
             elif c == button.KEY_DOWN and pointer_y < y_max:
                 pointer_y += 1
-
+            elif c == button.KEY_ENTER:
+                break
 
     def print(self, stdscr, pointer_y):
 

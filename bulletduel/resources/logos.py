@@ -1,8 +1,8 @@
-import resources.core as core
-import resources.images.logos as logos
+import bulletduel.resources.blueprint as blueprint
+import bulletduel.resources.images.logos as logos
 
 
-class Big(core.Sprite):
+class Big(blueprint.Sprite):
 
     def __init__(self) -> None:
         super().__init__(logos.big)
