@@ -14,7 +14,7 @@ class MainMenu:
         self.menu = blueprint.Sprite.create_menu(['Duel', 'Campaign', 'Settings', 'Exit'])
         self.menu_x = config.window_width_half - int(self.menu.width / 2)
 
-        self.start(stdscr)
+        self.start(stdscr)#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 
     def start(self, stdscr):
         y_min = 14
