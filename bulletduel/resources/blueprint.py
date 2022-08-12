@@ -1,91 +1,56 @@
 import curses
+from abc import abstractmethod
 
 
 class Sprite:
+    def __init__(self, image: list[str]) -> None:
+        self.image = image
+        # create blank image
+        self.blank = []
+        for line in self.image:
+            self.blank.append(len(line) * " ")
+        self.y = None
+        self.x = None
 
-    @staticmethod
-    def clean(image: str) -> str:
-        image_striped = image.splitlines()
-        image_cleaned = list()
-        for strip in image_striped:
-            if not (strip == '' or strip.isspace()):
-                image_cleaned.append(strip)
-        return image_cleaned
-    
-    @classmethod
-    def create_menu(cls, sprite):
-        lens = [len(line) for line in sprite]
-        highest_len = max(lens)
-        new_sprite = ''
-        for line in sprite:
-            new_sprite += cls._compensate(line, highest_len) + '\n'
-        return cls(new_sprite)
-
-    @staticmethod
-    def _compensate(line, highest_len):
-        spaces = highest_len - len(line)
-        half_spaces = round(spaces / 2)
-        empty = ' ' * half_spaces
-        line = empty + line
-        return line
-
-
-    def __init__(self, image, y = None, x = None) -> None:
-        self.image = self.clean(image)
-        self.y = y
-        self.x = x
-    
     @property
     def height(self):
         return len(self.image)
-    
+
     @property
     def width(self):
-        lens = [len(line) for line in self.image]
-        return max(lens)
+        return max([len(line) for line in self.image])
 
-    def draw(self, stdscr, y, x):
-        self.y = y
-        self.x = x
-        self._print(stdscr, self.image, y, x)
+    def draw(self, stdscr: curses.window, y: int = None, x: int = None):
+        self.y = self.y if y is None else y
+        self.x = self.x if x is None else x
+        self._print(stdscr)
 
-    def erase(self, stdscr):
+    def move(self, stdscr, width, height):
+        self.erase(stdscr)
+        self.y += height
+        self.x += width
+        self._print(stdscr)
+
+    def erase(self, stdscr: curses.window):
         if not self.y is None and not self.x is None:
-            self._print(stdscr, self._blank(), self.y, self.x)
+            for y, line in enumerate(self.blank, self.y):
+                stdscr.addstr(y, self.x, line)
 
-    def _blank(self):
-        blank = ' ' * self.width + '\n'
-        return (blank * self.height).splitlines()
+    def _print(self, stdscr: curses.window):
+        for y, line in enumerate(self.image, self.y):
+            try:
+                stdscr.addstr(y, self.x, line)
+            except Exception:
+                pass
 
-    def _print(self, stdscr, sprite, y, x):
-        i = y
-        for line in sprite:
-            stdscr.addstr(i, x, line)
-            i += 1
-    
-
-class Pointer:
-
-    def __init__(self, right, left) -> None:
-       self.right = Sprite(right)
-       self.left = Sprite(left)
-
-    def draw_left(self, stdscr, y, x):
-       self.left.draw(stdscr, y, x)
-
-    def erase_left(self, stdscr):
-       self.left.erase(stdscr)
-    
-    def draw_right(self, stdscr, y, x):
-       self.right.draw(stdscr, y, x)
-
-    def erase_right(self, stdscr):
-       self.right.erase(stdscr)
+    def __repr__(self) -> str:
+        return "\n".join(self.image)
 
 
-class Window:
-
-    def __init__(self, stdscr, width, height, top_bottom = '-', left_right = '|', corners = '+') -> None:
+class WindowFrame:
+    def __init__(
+        self, stdscr, width, height, top_bottom="-", left_right="|", corners="+"
+    ) -> None:
         self.stdscr = stdscr
         self.width = width
         self.height = height
@@ -98,17 +63,17 @@ class Window:
         try:
             self.stdscr.clear()
 
-            #TOP_BOTTOM
+            # TOP_BOTTOM
             for x in range(1, self.width - 1):
-                self.stdscr.addch(0, x, self.top_bottom) #TOP
+                self.stdscr.addch(0, x, self.top_bottom)  # TOP
                 self.stdscr.addch(self.height - 1, x, self.top_bottom)
 
-            #LEFT_RIGHT
+            # LEFT_RIGHT
             for y in range(1, self.height - 1):
                 self.stdscr.addch(y, 0, self.left_right)
                 self.stdscr.addch(y, self.width - 1, self.left_right)
 
-            #CORNERS
+            # CORNERS
             self.stdscr.addch(0, 0, self.corners)
             self.stdscr.addch(0, self.width - 1, self.corners)
             self.stdscr.addch(self.height - 1, 0, self.corners)
@@ -116,35 +81,37 @@ class Window:
 
             self.stdscr.refresh()
         except Exception:
-            raise Exception("Resize Window")   
+            raise Exception("Resize Window")
 
-    def inside_window(self):
-        return curses.newwin(self.height-2, self.width-2, 1, 1) 
+    def child_window(self):
+        return curses.newwin(self.height - 2, self.width - 2, 1, 1)
 
 
-class Menu:
+class Window:
+    def __init__(self, stdscr: curses.window) -> None:
+        self.win_height, self.win_width = stdscr.getmaxyx()
+        self.win_width_mid = int(self.win_width / 2)
+        self.win_height_mid = int(self.win_height / 2)
+        self.stdscr = stdscr
 
-    def __init__(self, options: set, pointer: Pointer = None) -> None:
+        self.setup()
+        self.run()
+
+    @abstractmethod
+    def setup() -> None:
+        pass
+
+    @abstractmethod
+    def run() -> None:
         pass
 
 
-if __name__ == '__main__':
-    import curses
-    def main(stdscr):
-
-        sword_left='''
-   .
-;-{<>===>
-   `'''
-        s = Sprite(sword_left)
-        s.draw(stdscr, 0, 0)
-
-        stdscr.refresh()
-        stdscr.getkey()
-
-        s.erase(stdscr)
-
-        stdscr.refresh()
-        stdscr.getkey()
-
-    curses.wrapper(main)
+class Menu(Sprite):
+    def __init__(self, options: list[str]) -> None:
+        self.options = options
+        highest_len = max([len(line) for line in options])
+        new_options = []
+        for line in options:
+            spaces = " " * round((highest_len - len(line)) / 2)
+            new_options.append(spaces + line)
+        super().__init__(new_options)
