@@ -1,7 +1,7 @@
 import test
 
-from bulletduel.resources.blueprint import Sprite, Menu
-from bulletduel.resources.sprites.factory import get
+from bulletduel.resources.blueprint import Sprite
+from bulletduel.resources.sprites.factory import get, menu
 
 
 # test sprite factory
@@ -15,5 +15,5 @@ print_sprite("pointer_left")
 print_sprite("pointer_right")
 
 #test Menu
-menu = Menu(['one', 'two', 'three'])
-print(menu)
+imenu = menu(['one', 'two', 'three'])
+print(imenu)
