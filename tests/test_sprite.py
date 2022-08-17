@@ -14,6 +14,6 @@ print_sprite("logo")
 print_sprite("pointer_left")
 print_sprite("pointer_right")
 
-#test Menu
-imenu = menu(['one', 'two', 'three'])
+# test Menu
+imenu = menu(["one", "two", "three"])
 print(imenu)
