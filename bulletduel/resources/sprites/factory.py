@@ -19,11 +19,3 @@ def pointer_left() -> Sprite:
 
 def pointer_right() -> Sprite:
     return get("pointer_right")
-
-def menu(options: list[str]) -> Sprite:
-    highest_len = max([len(line) for line in options])
-    new_options = []
-    for line in options:
-        spaces = " " * round((highest_len - len(line)) / 2)
-        new_options.append(spaces + line)
-    return Sprite(new_options)

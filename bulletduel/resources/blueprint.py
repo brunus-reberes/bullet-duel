@@ -1,5 +1,8 @@
 import curses
 from abc import abstractmethod
+import logging
+logger = logging.getLogger(__name__)
+
 
 
 class Sprite:
@@ -12,7 +15,7 @@ class Sprite:
         self.y = None
         self.x = None
         self.height = len(self.image)
-        self.width = max([len(line) for line in self.image])    
+        self.width = max([len(line) for line in self.image])
 
     def draw(self, stdscr: curses.window, y: int = None, x: int = None):
         self.y = self.y if y is None else y
@@ -22,6 +25,7 @@ class Sprite:
                 stdscr.addstr(y, self.x, line)
             except Exception as e:
                 import logging
+
                 logger = logging.getLogger(__name__)
                 logger.exception(e)
 
@@ -35,7 +39,6 @@ class Sprite:
         if not self.y is None and not self.x is None:
             for y, line in enumerate(self.blank, self.y):
                 stdscr.addstr(y, self.x, line)
-        
 
     def __repr__(self) -> str:
         return "\n".join(self.image)
@@ -45,7 +48,7 @@ class WindowFrame:
     def __init__(
         self, stdscr, width, height, top_bottom="-", left_right="|", corners="+"
     ) -> None:
-        self.stdscr = stdscr
+        self.stdscr: curses.window = stdscr
         self.width = width
         self.height = height
         self.top_bottom = top_bottom
@@ -72,8 +75,6 @@ class WindowFrame:
             # Print frame
             self.stdscr.refresh()
         except Exception as e:
-            import logging
-            logger = logging.getLogger(__name__)
             logger.info("Resize terminal window")
             logger.exception(e)
 
@@ -88,9 +89,6 @@ class Window:
         self.win_height_mid = int(self.win_height / 2)
         self.stdscr = stdscr
 
-        self.setup()
-        self.run()
-
     @abstractmethod
     def setup() -> None:
         pass
@@ -99,7 +97,36 @@ class Window:
     def run() -> None:
         pass
 
+    def start(self):
+        self.setup()
+        self.run()
 
-class Selector:
-    def __init__(self, options: list[str], menus: list[Window]) -> None:
-        pass
+
+class Menu:
+    def __init__(self, options: list[(str, Window)]) -> None:
+        self.names = []
+        self.windows = []
+        for name, win in options:
+            self.names.append(name)
+            self.windows.append(win)
+        self.index = 1
+        #build sprite
+        highest_len = max([len(line) for line in self.names])
+        new_options = []
+        for line in self.names:
+            spaces = " " * round((highest_len - len(line)) / 2)
+            new_options.append(spaces + line)
+        self.sprite = Sprite(new_options)
+
+    def next(self) -> int:
+        if self.index + 1 <= len(self.windows):
+            self.index += 1
+            return self.index
+
+    def previous(self) -> int:
+        if self.index - 1 >= 1:
+            self.index -= 1
+            return self.index
+
+    def select(self) -> Window:
+        return self.windows[self.index]

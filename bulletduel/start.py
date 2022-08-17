@@ -7,14 +7,14 @@ from resources.windows.main_menu import MainMenu
 
 
 def main(stdscr: curses.window):
-    logging.basicConfig(filename="system.log", filemode="w")
+    logging.basicConfig(filename="system.log", filemode="w", level=logging.DEBUG)
     logger = logging.getLogger(__name__)
     try:
         logger.info("Starting game")
-        
+
         curses.curs_set(0)
         window = WindowFrame(stdscr, window_width, window_height).child_window()
-        MainMenu(window)
+        MainMenu(window).start()
 
         logger.info("Exiting game")
     except Exception as err:
