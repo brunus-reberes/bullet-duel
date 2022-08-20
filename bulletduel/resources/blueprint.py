@@ -76,7 +76,9 @@ class WindowFrame:
             # Print frame
             self.stdscr.refresh()
         except Exception:
-            logger.error("could not print the window frame. try to resize terminal window")
+            logger.error(
+                "could not print the window frame. try to resize terminal window"
+            )
 
     def child_window(self):
         return curses.newwin(self.height - 2, self.width - 2, 1, 1)
@@ -115,8 +117,10 @@ class Window:
 
 
 class Menu:
-    def __init__(self, stdscr: curses.window, options: list[(str, Type[Window])]) -> None:
-        logger.info('initializing menu ' + str(options))
+    def __init__(
+        self, stdscr: curses.window, options: list[(str, Type[Window])]
+    ) -> None:
+        logger.info("initializing menu " + str(options))
         self.names = []
         self.windows = []
         self.stdscr = stdscr
@@ -136,15 +140,15 @@ class Menu:
     def next(self) -> int:
         if self.index + 1 <= len(self.windows):
             self.index += 1
-            self.logger.info('next item (index ' + str(self.index) + ')')
+            self.logger.info("next item (index " + str(self.index) + ")")
             return self.index
 
     def previous(self) -> int:
         if self.index - 1 >= 1:
             self.index -= 1
-            self.logger.info('previous item (index ' + str(self.index) + ')')
+            self.logger.info("previous item (index " + str(self.index) + ")")
             return self.index
 
     def select(self) -> Window:
-        self.logger.info('selecting item (index ' + str(self.index) + ')')
-        self.windows[self.index-1](self.stdscr).start()
+        self.logger.info("selecting item (index " + str(self.index) + ")")
+        self.windows[self.index - 1](self.stdscr).start()
