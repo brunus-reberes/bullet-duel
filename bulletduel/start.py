@@ -10,13 +10,13 @@ def main(stdscr: curses.window):
     logging.basicConfig(filename="system.log", filemode="w", level=logging.DEBUG)
     logger = logging.getLogger(__name__)
     try:
-        logger.info("Starting game")
+        logger.info("starting game")
 
         curses.curs_set(0)
         window = WindowFrame(stdscr, window_width, window_height).child_window()
         MainMenu(window).start()
 
-        logger.info("Exiting game")
+        logger.info("exiting game")
     except Exception as err:
         logger.exception(err)
 
