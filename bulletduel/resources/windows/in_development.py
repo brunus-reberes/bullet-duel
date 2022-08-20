@@ -1,16 +1,17 @@
-import resources.button as button
-from resources.blueprint import Window, WindowFrame, Menu
-from resources.sprites.factory import logo, pointer_left, pointer_right
 import curses
 import logging
-logger = logging.getLogger(__name__)
+
+import resources.button as button
+from resources.blueprint import Menu, Window
 
 
 class InDevelopment(Window):
     def setup(self) -> None:
+        logger = logging.getLogger(self.__class__.__name__)
+        logger.info("middle of window height: " + self.win_height_mid)
+        logger.info("max y and x: " + new_stdscr.getmaxyx())
         width = 20
         height = 6
-        logger.info(self.win_height_mid)
         new_stdscr = curses.newwin(
             height,
             width,
@@ -18,7 +19,6 @@ class InDevelopment(Window):
             self.win_width_mid - int(width / 2),
         )
         new_stdscr.border()
-        logger.info(new_stdscr.getmaxyx())
 
     def run(self):
         self.stdscr.clear()
