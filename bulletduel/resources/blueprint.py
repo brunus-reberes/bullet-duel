@@ -1,8 +1,9 @@
 import curses
-from abc import abstractmethod
 import logging
-logger = logging.getLogger(__name__)
+from abc import abstractmethod
+from typing import Type, Union
 
+logger = logging.getLogger(__name__)
 
 
 class Sprite:
@@ -74,9 +75,8 @@ class WindowFrame:
             self.stdscr.addch(self.height - 1, self.width - 1, self.corners)
             # Print frame
             self.stdscr.refresh()
-        except Exception as e:
-            logger.info("Resize terminal window")
-            logger.exception(e)
+        except Exception:
+            logger.error("could not print the window frame. try to resize terminal window")
 
     def child_window(self):
         return curses.newwin(self.height - 2, self.width - 2, 1, 1)
@@ -88,6 +88,15 @@ class Window:
         self.win_width_mid = int(self.win_width / 2)
         self.win_height_mid = int(self.win_height / 2)
         self.stdscr = stdscr
+        self.refresh = False
+        self.exit = False
+
+    def _run(self) -> None:
+        while not self.exit:
+            if self.refresh:
+                self.setup()
+                self.refresh = False
+            self.run()
 
     @abstractmethod
     def setup() -> None:
@@ -97,20 +106,26 @@ class Window:
     def run() -> None:
         pass
 
-    def start(self):
+    def start(self) -> bool:
         self.setup()
-        self.run()
+        self._run()
+
+    def __repr__(self) -> str:
+        return "'" + self.__class__.__name__ + "Window'"
 
 
 class Menu:
-    def __init__(self, options: list[(str, Window)]) -> None:
+    def __init__(self, stdscr: curses.window, options: list[(str, Type[Window])]) -> None:
+        logger.info('initializing menu ' + str(options))
         self.names = []
         self.windows = []
+        self.stdscr = stdscr
+        self.logger = logging.getLogger(self.__class__.__name__)
         for name, win in options:
             self.names.append(name)
             self.windows.append(win)
         self.index = 1
-        #build sprite
+        # build sprite
         highest_len = max([len(line) for line in self.names])
         new_options = []
         for line in self.names:
@@ -121,12 +136,15 @@ class Menu:
     def next(self) -> int:
         if self.index + 1 <= len(self.windows):
             self.index += 1
+            self.logger.info('next item (index ' + str(self.index) + ')')
             return self.index
 
     def previous(self) -> int:
         if self.index - 1 >= 1:
             self.index -= 1
+            self.logger.info('previous item (index ' + str(self.index) + ')')
             return self.index
 
     def select(self) -> Window:
-        return self.windows[self.index]
+        self.logger.info('selecting item (index ' + str(self.index) + ')')
+        self.windows[self.index-1](self.stdscr).start()
