@@ -1,1 +1,2 @@
-from bulletduel.resources.windows import Exit, InDevelopment
+from resources.windows.exit import Exit
+from resources.windows.in_development import InDevelopment

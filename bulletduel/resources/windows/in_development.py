@@ -1,15 +1,14 @@
 import curses
 import logging
 
-import resources.button as button
-from resources.blueprint import Menu, Window
+from resources.blueprint import Window
 
 
 class InDevelopment(Window):
     def setup(self) -> None:
         logger = logging.getLogger(self.__class__.__name__)
-        logger.info("middle of window height: " + self.win_height_mid)
-        logger.info("max y and x: " + new_stdscr.getmaxyx())
+        logger.info("middle of window height: " + str(self.win_height_mid))
+        logger.info("middle of window width: " + str(self.win_width_mid))
         width = 20
         height = 6
         new_stdscr = curses.newwin(
@@ -19,6 +18,7 @@ class InDevelopment(Window):
             self.win_width_mid - int(width / 2),
         )
         new_stdscr.border()
+        logger.info("max y and x: " + str(new_stdscr.getmaxyx()))
 
     def run(self):
         self.stdscr.clear()
